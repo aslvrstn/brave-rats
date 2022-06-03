@@ -44,33 +44,33 @@ def play_game(red_brain_fn=random_ai_brain_fn, blue_brain_fn=human_brain_fn,
         result = resolve_fight(red_card, blue_card, game)
         if verbose:
             result_string = 'red {} vs. blue {} -> {}'
-            print result_string.format(redify(red_card.name),
+            print(result_string.format(redify(red_card.name),
                                        blueify(blue_card.name),
-                                       result.name)
-            print game.score_summary
+                                       result.name))
+            print(game.score_summary)
 
     # Game's over when while loop exits
     _notify_game_over(red_player, blue_player, game)
 
     if verbose:
         if game.winner:
-            print game.winner.name.title(), 'wins!'
+            print(game.winner.name.title(), 'wins!')
         else:
-            print 'tie!'
-        print  # extra newline for readability
+            print('tie!')
+        print()  # extra newline for readability
 
     return game
 
 
 def print_match_summary(games):
     winners = [game.winner for game in games]
-    print "Total wins for each player:"
+    print("Total wins for each player:")
     win_counter = Counter(winners)
-    for player, wins in win_counter.iteritems():
+    for player, wins in win_counter.items():
         if player is None:
-            print "{} ties".format(wins)
+            print("{} ties".format(wins))
         else:
-            print "{} won {} times".format(player.name, wins)
+            print("{} won {} times".format(player.name, wins))
 
 
 def play_match(red_brain_fn=human_brain_fn, blue_brain_fn=random_ai_brain_fn,
@@ -109,7 +109,7 @@ def args_from_match_parser():
     parser.add_argument('-q', '--quiet-games', action='store_true', default=False,
                         help='Set to have only game results (not turn-by-turn details) printed to stdout')
     args = vars(parser.parse_args())  # Convert the Namespace to a dict
-    args = {k:v for k,v in args.items() if v is not None}  # Remove None values
+    args = {k:v for k,v in list(args.items()) if v is not None}  # Remove None values
 
     # Look up brains by name
     if 'red_brain' in args:

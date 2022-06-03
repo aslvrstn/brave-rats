@@ -1,7 +1,7 @@
 CLI_COLORS={
-    'red': u'\x1b[31m',
-    'blue': u'\033[94m',
-    'end': u'\033[0m'
+    'red': '\x1b[31m',
+    'blue': '\033[94m',
+    'end': '\033[0m'
     }
 
 
@@ -25,4 +25,4 @@ def _colorize(str_, color_name):
     :param color_name: a color from CLI_COLORS
     :return: str_, wrapped with appropriate flags so that when printed it will be colorized
     '''
-    return u'{}{}{}'.format(CLI_COLORS[color_name], str_, CLI_COLORS['end'])
+    return '{}{}{}'.format(CLI_COLORS[color_name], str_, CLI_COLORS['end'])

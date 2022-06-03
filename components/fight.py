@@ -87,16 +87,16 @@ def print_results_table(red_general_played=False):
     previous_red = Card.general if red_general_played else None
 
     # Table header
-    print ' ', '\t', '\t'.join('b=' + format_cell(card.value) for card in Card)
+    print(' ', '\t', '\t'.join('b=' + format_cell(card.value) for card in Card))
 
     for red_card in Card:
-        print '\t'.join(
+        print('\t'.join(
             ['r=' + format_cell(red_card.value)] +  # Row header
             [
                 format_cell(_short_format_result(fight_result(red_card, blue_card, previous_red, None)))
                 for blue_card in Card
             ]
-        )
+        ))
 
 
 def resolve_fight(red_card, blue_card, game):
@@ -136,11 +136,12 @@ def resolve_fight(red_card, blue_card, game):
     return result
 
 
-def successful_spy_color((red_card, blue_card)):
+def successful_spy_color(xxx_todo_changeme):
     ''' Determine whether the provided fight has a non-nullified spy in it
     Takes a fight tuple of (red_card, blue_card)
     :return: Color of non-nullified spy, if any, or None if no non-nullified spy.
     '''
+    (red_card, blue_card) = xxx_todo_changeme
     spy_nullifiers = {Card.musician, Card.wizard, Card.spy}
     if red_card == Card.spy and blue_card not in spy_nullifiers:
         return Color.red

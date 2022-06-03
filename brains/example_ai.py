@@ -15,5 +15,5 @@ def random_ai_brain_fn(player, game, spied_card):
         return None
 
     if spied_card:
-        print 'Hah! You think you can beat me with that {}? Prepare to be CRUSHED!'.format(spied_card.name)
+        print('Hah! You think you can beat me with that {}? Prepare to be CRUSHED!'.format(spied_card.name))
     return random.choice(player.hand)

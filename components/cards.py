@@ -13,9 +13,9 @@ class Card(IntEnum):
 
     @classmethod
     def get_from_int(cls, n):
-        return (
+        return next((
             item for item in cls if item.value is n
-        ).next()
+        ))
 
 
 def initial_hand(hand_str=None):
