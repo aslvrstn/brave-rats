@@ -1,4 +1,9 @@
+from typing import Optional
+
+from brains.Brain import Brain
 from components import cards
+from components.cards import Color, Card
+from components.game_status import GameStatus
 
 
 class CheatingException(Exception):
@@ -6,7 +11,7 @@ class CheatingException(Exception):
 
 
 class Player(object):
-    def __init__(self, color, brain, hand_str=None):
+    def __init__(self, color: Color, brain: Brain, hand_str: str=None):
         '''
         :param color: a Color enum value indicating which color this player is playing for
         :param game: a GameStatus object
@@ -25,10 +30,10 @@ class Player(object):
         self.color = color
         self.brain = brain
 
-    def has_cards(self):
+    def has_cards(self) -> bool:
         return bool(len(self.hand))
 
-    def choose_and_play_card(self, game, spied_card=None):
+    def choose_and_play_card(self, game: GameStatus, spied_card: Optional[Card]=None) -> Card:
         card = self.brain.play_turn(self, game, spied_card)
         if card not in self.hand:
             raise CheatingException(
@@ -37,7 +42,3 @@ class Player(object):
             )
         self.hand.remove(card)
         return card
-
-    def notify_game_over(self, game):
-        # Call the brain function and give it a chance to clean up now that the game's over
-        self.brain.play_turn(self, game, None)

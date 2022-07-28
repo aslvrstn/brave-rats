@@ -1,15 +1,13 @@
 #!/usr/bin/python
 #  -*- coding: UTF8 -*-
 import argparse
-from collections import Counter
 import sys
+from collections import Counter
 
 from brains.example_ai import RandomAI
 from brave_rats import play_match
-
 from components.cards import Color
-from components.style import redify, blueify, color_pad
-
+from components.style import blueify, color_pad, redify
 
 EXCLUDED_BRAIN_NAMES = {'human'}
 
@@ -58,7 +56,7 @@ def _print_summary(results, ai_names):
 def play_round_robin(num_games=1000, interactive=False):
     # New AIs need to go into this dict
     brains_dict = {"random": RandomAI}
-    
+
     ai_names = brains_dict.keys()
 
     print('{} AIs discovered:'.format(len(ai_names)))

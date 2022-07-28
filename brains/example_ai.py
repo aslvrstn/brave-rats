@@ -1,10 +1,14 @@
 import random
+from typing import Optional
 
+from brains.Brain import Brain
 from components.cards import Card
+from components.game_status import GameStatus
+from components.player import Player
 
 
-class RandomAI:
-    def play_turn(self, player, game, spied_card) -> Card:
+class RandomAI(Brain):
+    def play_turn(self, player: Player, game: GameStatus, spied_card: Optional[Card]) -> Card:
         '''The most sophisticated Brave Rats AI ever written
         Expects to be called once each time a card needs to be played, and once after the game is over.
 
@@ -14,9 +18,6 @@ class RandomAI:
             will play. Otherwise, None
         :return: a card from my player's hand with which to vanquish my opponent, or None if the game is over
         '''
-        if game.is_over:
-            return None
-
         if spied_card:
             print('Hah! You think you can beat me with that {}? Prepare to be CRUSHED!'.format(spied_card.name))
         return random.choice(player.hand)

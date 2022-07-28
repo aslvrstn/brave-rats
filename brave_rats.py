@@ -1,7 +1,8 @@
 import argparse
-from collections import Counter
 import sys
+from collections import Counter
 
+from brains.Brain import Brain
 from brains.example_ai import RandomAI
 from brains.human import HumanBrain
 from components.cards import Color
@@ -26,12 +27,7 @@ def _get_played_cards(red_player, blue_player, game):
     return red_card, blue_card
 
 
-def _notify_game_over(red_player, blue_player, game):
-    red_player.notify_game_over(game)
-    blue_player.notify_game_over(game)
-
-
-def play_game(red_brain=None, blue_brain=None,
+def play_game(red_brain: Brain=None, blue_brain: Brain=None,
               initial_red_hand_str=None, initial_blue_hand_str=None,
               verbose=True):
     if red_brain is None:
@@ -52,9 +48,6 @@ def play_game(red_brain=None, blue_brain=None,
                                        blueify(blue_card.name),
                                        result.name))
             print(game.score_summary)
-
-    # Game's over when while loop exits
-    _notify_game_over(red_player, blue_player, game)
 
     if verbose:
         if game.winner:
