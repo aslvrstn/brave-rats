@@ -8,5 +8,7 @@ if TYPE_CHECKING:
 
 
 class Brain:
-    def play_turn(self, player: Player, game: GameStatus, spied_card: Optional[Card]) -> Card:
+    def play_turn(
+        self, player: Player, game: GameStatus, spied_card: Optional[Card]
+    ) -> Card:
         raise NotImplementedError()

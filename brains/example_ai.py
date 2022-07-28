@@ -8,8 +8,10 @@ from components.player import Player
 
 
 class RandomAI(Brain):
-    def play_turn(self, player: Player, game: GameStatus, spied_card: Optional[Card]) -> Card:
-        '''The most sophisticated Brave Rats AI ever written
+    def play_turn(
+        self, player: Player, game: GameStatus, spied_card: Optional[Card]
+    ) -> Card:
+        """The most sophisticated Brave Rats AI ever written
         Expects to be called once each time a card needs to be played, and once after the game is over.
 
         :param player: a Player instance
@@ -17,7 +19,11 @@ class RandomAI(Brain):
         :param spied_card: If I successfully played a spy last turn, this is the card that the opponent has revealed and
             will play. Otherwise, None
         :return: a card from my player's hand with which to vanquish my opponent, or None if the game is over
-        '''
+        """
         if spied_card:
-            print('Hah! You think you can beat me with that {}? Prepare to be CRUSHED!'.format(spied_card.name))
+            print(
+                "Hah! You think you can beat me with that {}? Prepare to be CRUSHED!".format(
+                    spied_card.name
+                )
+            )
         return random.choice(player.hand)

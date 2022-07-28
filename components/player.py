@@ -11,8 +11,8 @@ class CheatingException(Exception):
 
 
 class Player(object):
-    def __init__(self, color: Color, brain: Brain, hand_str: str=None):
-        '''
+    def __init__(self, color: Color, brain: Brain, hand_str: str = None):
+        """
         :param color: a Color enum value indicating which color this player is playing for
         :param game: a GameStatus object
         :param brain_fn: The brains of the operation. See example_ai.py for an example.
@@ -25,7 +25,7 @@ class Player(object):
             Should return a card from its hand to play. Can harbor hidden powers; should be expected to be called
                 exactly once per round.
         :param hand_str: string of card values in initial hand (eg. '0123456' to play without Prince)
-        '''
+        """
         self.hand = cards.initial_hand(hand_str)
         self.color = color
         self.brain = brain
@@ -33,12 +33,15 @@ class Player(object):
     def has_cards(self) -> bool:
         return bool(len(self.hand))
 
-    def choose_and_play_card(self, game: GameStatus, spied_card: Optional[Card]=None) -> Card:
+    def choose_and_play_card(
+        self, game: GameStatus, spied_card: Optional[Card] = None
+    ) -> Card:
         card = self.brain.play_turn(self, game, spied_card)
         if card not in self.hand:
             raise CheatingException(
-                '{} tried to play card {} which is not in hand {}'
-                .format(self.brain, card, self.hand)
+                "{} tried to play card {} which is not in hand {}".format(
+                    self.brain, card, self.hand
+                )
             )
         self.hand.remove(card)
         return card

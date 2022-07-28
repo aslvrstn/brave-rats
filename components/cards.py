@@ -13,9 +13,7 @@ class Card(IntEnum):
 
     @classmethod
     def get_from_int(cls, n):
-        return next((
-            item for item in cls if item.value is n
-        ))
+        return next((item for item in cls if item.value is n))
 
 
 def initial_hand(hand_str=None):
@@ -25,5 +23,6 @@ def initial_hand(hand_str=None):
         # In a vanilla game, players will start with one of each card
         return [card for card in Card]
 
+
 # Use IntEnum, not Enum, here, to prevent bug #15: "Loaded brain functions have wiiiiiierd behavior"
-Color = IntEnum('Color', 'red blue')
+Color = IntEnum("Color", "red blue")
