@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Set
 
 from brains.Brain import Brain
 from components import cards
@@ -34,9 +34,12 @@ class Player(object):
         return bool(len(self.hand))
 
     def choose_and_play_card(
-        self, game: GameStatus, spied_card: Optional[Card] = None
+        self,
+        game: GameStatus,
+        spied_card: Optional[Card] = None,
+        opponent_hand: Optional[Set[Card]] = None,
     ) -> Card:
-        card = self.brain.play_turn(self, game, spied_card)
+        card = self.brain.play_turn(self, game, spied_card, opponent_hand)
         if card not in self.hand:
             raise CheatingException(
                 "{} tried to play card {} which is not in hand {}".format(

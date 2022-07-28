@@ -12,8 +12,12 @@ from components.player import Player
 from components.style import blueify, redify
 
 
-def _get_played_cards(red_player, blue_player, game):
+def _get_played_cards(red_player, blue_player, game, notify_of_hand=True):
     spy_color = successful_spy_color(game.most_recent_fight)
+    red_hand, blue_hand = None, None
+    if notify_of_hand:
+        red_hand = set(red_player.hand)
+        blue_hand = set(blue_player.hand)
     if spy_color == Color.red:
         # Red gets to peek at Blue's card
         blue_card = blue_player.choose_and_play_card(game)
@@ -23,9 +27,8 @@ def _get_played_cards(red_player, blue_player, game):
         red_card = red_player.choose_and_play_card(game)
         blue_card = blue_player.choose_and_play_card(game, red_card)
     else:
-        red_card, blue_card = red_player.choose_and_play_card(
-            game
-        ), blue_player.choose_and_play_card(game)
+        red_card = red_player.choose_and_play_card(game)
+        blue_card = blue_player.choose_and_play_card(game)
     return red_card, blue_card
 
 
@@ -35,6 +38,7 @@ def play_game(
     initial_red_hand_str=None,
     initial_blue_hand_str=None,
     verbose=True,
+    notify_of_hand=True,
 ):
     if red_brain is None:
         red_brain = HumanBrain()
@@ -46,7 +50,9 @@ def play_game(
     blue_player = Player(Color.blue, brain=blue_brain, hand_str=initial_blue_hand_str)
 
     while not game.is_over:
-        red_card, blue_card = _get_played_cards(red_player, blue_player, game)
+        red_card, blue_card = _get_played_cards(
+            red_player, blue_player, game, notify_of_hand
+        )
         result = resolve_fight(red_card, blue_card, game)
         if verbose:
             result_string = "red {} vs. blue {} -> {}"
@@ -78,8 +84,16 @@ def print_match_summary(games):
             print("{} won {} times".format(player.name, wins))
 
 
+# `notify_of_hand` tells blue what remains in red's hands and vice versa, since it's trivial
+# to track that if the game starts with known hands, and passing it down is the easiest way
+# to implement.
 def play_match(
-    red_brain=None, blue_brain=None, num_games=1, verbose=True, quiet_games=True
+    red_brain=None,
+    blue_brain=None,
+    num_games=1,
+    verbose=True,
+    quiet_games=True,
+    notify_of_hand=True,
 ):
     if red_brain is None:
         red_brain = HumanBrain()
@@ -90,7 +104,10 @@ def play_match(
         sys.stdout.write("\n")
     for game_index in range(num_games):
         game = play_game(
-            red_brain=red_brain, blue_brain=blue_brain, verbose=not quiet_games
+            red_brain=red_brain,
+            blue_brain=blue_brain,
+            verbose=not quiet_games,
+            notify_of_hand=notify_of_hand,
         )
         if quiet_games and verbose:
             # Games are quiet, so print some stuff at this level

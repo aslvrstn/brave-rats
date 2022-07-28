@@ -1,5 +1,5 @@
 import random
-from typing import Optional
+from typing import Optional, Set
 
 from brains.Brain import Brain
 from components.cards import Card
@@ -9,7 +9,11 @@ from components.player import Player
 
 class RandomAI(Brain):
     def play_turn(
-        self, player: Player, game: GameStatus, spied_card: Optional[Card]
+        self,
+        player: Player,
+        game: GameStatus,
+        spied_card: Optional[Card],
+        opponent_hand: Optional[Set[Card]],
     ) -> Card:
         """The most sophisticated Brave Rats AI ever written
         Expects to be called once each time a card needs to be played, and once after the game is over.

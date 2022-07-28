@@ -1,5 +1,5 @@
 import random
-from typing import Optional
+from typing import List, Optional
 
 from brains.Brain import Brain
 from components.cards import Card, Color
@@ -10,7 +10,11 @@ from components.player import Player
 
 class HumanBrain(Brain):
     def play_turn(
-        self, player: Player, game: GameStatus, spied_card: Optional[Card]
+        self,
+        player: Player,
+        game: GameStatus,
+        spied_card: Optional[Card],
+        opponent_hand: List[Optional[Card]],
     ) -> Card:
         if spied_card:
             print("Opponent is going to play {}".format(spied_card.name))
