@@ -3,13 +3,14 @@ from components.cards import Card, Color
 from components.fight import fight_result
 
 
-def human_brain_fn(player, game, spied_card):
-    if game.is_over:
-        return None
+class HumanBrain:
+    def play_turn(self, player, game, spied_card):
+        if game.is_over:
+            return None
 
-    if spied_card:
-        print('Opponent is going to play {}'.format(spied_card.name))
-    return _input_card(player.color, player.hand)
+        if spied_card:
+            print('Opponent is going to play {}'.format(spied_card.name))
+        return _input_card(player.color, player.hand)
 
 
 def _input_card(color, valid_cards):

@@ -2,11 +2,10 @@ import argparse
 from collections import Counter
 import sys
 
-from brains.example_ai import random_ai_brain_fn
-from brains.human import human_brain_fn
+from brains.example_ai import RandomAI
+from brains.human import HumanBrain
 from components.cards import Color
 from components.fight import resolve_fight, successful_spy_color
-from components.brain_management import get_brain
 from components.game_status import GameStatus
 from components.player import Player
 from components.style import blueify, redify
@@ -32,12 +31,17 @@ def _notify_game_over(red_player, blue_player, game):
     blue_player.notify_game_over(game)
 
 
-def play_game(red_brain_fn=random_ai_brain_fn, blue_brain_fn=human_brain_fn,
+def play_game(red_brain=None, blue_brain=None,
               initial_red_hand_str=None, initial_blue_hand_str=None,
               verbose=True):
+    if red_brain is None:
+        red_brain = HumanBrain()
+    if blue_brain is None:
+        blue_brain = RandomAI()
+
     game = GameStatus()
-    red_player = Player(Color.red, brain_fn=red_brain_fn, hand_str=initial_red_hand_str)
-    blue_player = Player(Color.blue, brain_fn=blue_brain_fn, hand_str=initial_blue_hand_str)
+    red_player = Player(Color.red, brain=red_brain, hand_str=initial_red_hand_str)
+    blue_player = Player(Color.blue, brain=blue_brain, hand_str=initial_blue_hand_str)
 
     while not game.is_over:
         red_card, blue_card = _get_played_cards(red_player, blue_player, game)
@@ -73,14 +77,19 @@ def print_match_summary(games):
             print("{} won {} times".format(player.name, wins))
 
 
-def play_match(red_brain_fn=human_brain_fn, blue_brain_fn=random_ai_brain_fn,
+def play_match(red_brain=None, blue_brain=None,
                num_games=1, verbose=True, quiet_games=True):
+    if red_brain is None:
+        red_brain = HumanBrain()
+    if blue_brain is None:
+        blue_brain = RandomAI()
+
     if verbose:
         sys.stdout.write('\n')
     for game_index in range(num_games):
         game = play_game(
-            red_brain_fn=red_brain_fn,
-            blue_brain_fn=blue_brain_fn,
+            red_brain=red_brain,
+            blue_brain=blue_brain,
             verbose=not quiet_games
         )
         if quiet_games and verbose:
@@ -112,10 +121,14 @@ def args_from_match_parser():
     args = {k:v for k,v in list(args.items()) if v is not None}  # Remove None values
 
     # Look up brains by name
+    class_by_name = {
+        "random": RandomAI,
+        "human": HumanBrain,
+    }
     if 'red_brain' in args:
-        args['red_brain_fn'] = get_brain(args.pop('red_brain'))
+        args['red_brain_fn'] = class_by_name[args.pop('red_brain')]()
     if 'blue_brain' in args:
-        args['blue_brain_fn'] = get_brain(args.pop('blue_brain'))
+        args['blue_brain_fn'] = class_by_name[args.pop('blue_brain')]()
     return args
 
 
