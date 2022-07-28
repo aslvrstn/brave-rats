@@ -26,7 +26,7 @@ def discover_brains(brains_root='./brains'):
     modules = [_f for _f in [
         _try_import_module(loader, module_name)
         for loader, module_name, is_pkg
-        in pkgutil.walk_packages(brains_root)
+        in pkgutil.walk_packages([brains_root])
     ] if _f]
 
     brain_fns = [
@@ -58,12 +58,3 @@ def get_brain(fn_name):
             'Couldn\'t find brain by unprefixed name "{}". Valid options are: {}'
             .format(fn_name, list(all_brains.keys()))
         )
-
-
-def reload_brain(brain_fn):
-    ''' Reimport the module containing the function to reset the brain's state between matches.
-    '''
-    module = brain_fn.__module__
-    name = brain_fn.__name__
-
-    return getattr(importlib.reload(importlib.import_module(module)), name)

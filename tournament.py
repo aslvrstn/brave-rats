@@ -5,7 +5,7 @@ from collections import Counter
 import sys
 from brave_rats import play_match
 
-from components.brain_management import discover_brains, unprefixed_name, reload_brain
+from components.brain_management import discover_brains, unprefixed_name
 from components.cards import Color
 from components.style import redify, blueify, color_pad
 
@@ -14,7 +14,7 @@ EXCLUDED_BRAIN_NAMES = {'human'}
 
 
 def _table_cell(contents):
-    return u' {:22} |'.format(contents)
+    return ' {:22} |'.format(contents)
 
 
 def _print_table_cell(contents):
@@ -40,10 +40,10 @@ def _print_summary(results, all_ais):
             else:
                 winners = [game.winner for game in games]
                 win_count = Counter(winners)
-            result_descrip = u'{}/{}/{}'.format(
-                u'←{}'.format(win_count[Color.red]),
+            result_descrip = '{}/{}/{}'.format(
+                '←{}'.format(win_count[Color.red]),
                 win_count[None],
-                u'↑{}'.format(win_count[Color.blue]),
+                '↑{}'.format(win_count[Color.blue]),
             )
             if win_count[Color.red] > win_count[Color.blue]:
                 colored_result_descrip = redify(result_descrip)
@@ -59,14 +59,14 @@ def play_round_robin(num_games=1000, interactive=False):
     brains_dict = discover_brains()
     all_ais = [
         brain_fn
-        for name, brain_fn in brains_dict.iteritems()
+        for name, brain_fn in brains_dict.items()
         if name not in EXCLUDED_BRAIN_NAMES
     ]
     ai_names = [unprefixed_name(ai) for ai in all_ais]
 
-    print '{} AIs discovered:'.format(len(all_ais))
-    print 'AIs:'
-    print '\n'.join(ai_names)
+    print('{} AIs discovered:'.format(len(all_ais)))
+    print('AIs:')
+    print('\n'.join(ai_names))
 
     results = {}
     for red_ai in all_ais:
@@ -76,13 +76,13 @@ def play_round_robin(num_games=1000, interactive=False):
                 blueify(unprefixed_name(blue_ai))
             )
             if interactive:
-                raw_input(next_match_intro)
+                input(next_match_intro)
             else:
-                print next_match_intro
+                print(next_match_intro)
 
             games = list(play_match(
-                reload_brain(red_ai),
-                reload_brain(blue_ai),
+                red_ai,
+                blue_ai,
                 num_games=num_games, verbose=True, quiet_games=True
             ))
             results[(red_ai, blue_ai)] = games
