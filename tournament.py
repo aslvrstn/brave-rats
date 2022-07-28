@@ -5,6 +5,7 @@ import sys
 from collections import Counter
 
 from brains.example_ai import RandomAI
+from brains.random_plus_beat_spied import RandomPlusBeatSpiedAI
 from brave_rats import play_match
 from components.cards import Color
 from components.style import blueify, color_pad, redify
@@ -27,7 +28,7 @@ def _print_table_row(contents):
 
 
 def _print_summary(results, ai_names):
-    _print_table_row([blueify(name) for name in ai_names])
+    _print_table_row(["*"] + [blueify(name) for name in ai_names])
     for red_ai in ai_names:
         _print_table_cell(redify(red_ai))
         for blue_ai in ai_names:
@@ -55,7 +56,8 @@ def _print_summary(results, ai_names):
 
 def play_round_robin(num_games=1000, interactive=False):
     # New AIs need to go into this dict
-    brains_dict = {"random": RandomAI}
+    brains_dict = {"random": RandomAI,
+                   "randomPlusBeatSpied": RandomPlusBeatSpiedAI}
 
     ai_names = brains_dict.keys()
 
