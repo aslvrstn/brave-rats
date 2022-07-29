@@ -24,10 +24,4 @@ class RandomAI(Brain):
             will play. Otherwise, None
         :return: a card from my player's hand with which to vanquish my opponent, or None if the game is over
         """
-        if spied_card:
-            print(
-                "Hah! You think you can beat me with that {}? Prepare to be CRUSHED!".format(
-                    spied_card.name
-                )
-            )
         return random.choice(player.hand)
