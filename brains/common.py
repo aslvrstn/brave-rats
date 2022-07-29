@@ -22,7 +22,7 @@ def best_card_against(
             (card, opponent_card, our_previous_card, opponent_previous_card)
         ]
 
-        # `FightResult` is ordered in ascending order for red, so compare in the right direction.
+        # `FightResult` is ordered in ascending order for "red", who we are pretending to be
         # >= so that we at least always replace `best_card=None` with a real card
         if res >= best_result:
             best_result = res
