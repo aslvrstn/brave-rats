@@ -49,7 +49,7 @@ def play_game(
     red_player = Player(Color.red, brain=red_brain, hand_str=initial_red_hand_str)
     blue_player = Player(Color.blue, brain=blue_brain, hand_str=initial_blue_hand_str)
 
-    while not game.is_over:
+    while not game.winner and red_player.has_cards() and blue_player.has_cards():
         red_card, blue_card = _get_played_cards(
             red_player, blue_player, game, notify_of_hand
         )

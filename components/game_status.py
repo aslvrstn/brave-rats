@@ -1,8 +1,7 @@
-from components.cards import Card, Color, initial_hand
+from components.cards import Card, Color
 
 # Game ends when players have played all of their cards, so the max number of rounds
 # in the game is the size of the players' initial hand.
-MAX_ROUNDS_IN_GAME = len(initial_hand())
 POINTS_TO_WIN = 4
 
 
@@ -11,9 +10,7 @@ class GameStatus(object):
         self.red_points, self.blue_points = 0, 0
 
         # List of tuples of (red_card, blue_card)
-        self.resolved_fights = (
-            []
-        )  # Doesn't include on hold fights; use all_fights for full list
+        self.resolved_fights = []  # Doesn't include on hold fights; use all_fights for full list
         self.on_hold_fights = []
 
     @property
@@ -34,18 +31,12 @@ class GameStatus(object):
         return None
 
     @property
-    def is_over(self):
-        # The game is over if somebody has won or if the players are out of cards
-        return self.winner or len(self.all_fights) == MAX_ROUNDS_IN_GAME
-
-    @property
-    def all_fights(self):
-        return self.resolved_fights + self.on_hold_fights
-
-    @property
     def most_recent_fight(self):
-        all_fights = self.all_fights
-        return all_fights[-1] if all_fights else (None, None)
+        if self.on_hold_fights:
+            return self.on_hold_fights[-1]
+        if self.resolved_fights:
+            return self.resolved_fights[-1]
+        return None, None
 
     @property
     def score_summary(self):

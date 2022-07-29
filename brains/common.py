@@ -8,6 +8,8 @@ def best_card_against(game: GameStatus, player: Player, opponent_card: Card) -> 
     if not player.hand:
         raise ValueError("Player must be holding cards")
 
+    previous_red_card, previous_blue_card = game.most_recent_fight
+
     # Start with the worst possible result
     best_result = (
         FightResult.blue_wins_game
@@ -17,7 +19,6 @@ def best_card_against(game: GameStatus, player: Player, opponent_card: Card) -> 
     best_card = None
     # Loop over every card to find the best possible FightResult with what we have
     for card in player.hand:
-        previous_red_card, previous_blue_card = game.most_recent_fight
         red_card = card if player.color == Color.red else opponent_card
         blue_card = card if player.color == Color.blue else opponent_card
         res = QUICK_FIGHT_RESULT[
