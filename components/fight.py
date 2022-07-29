@@ -1,11 +1,14 @@
-from enum import IntEnum
 import itertools
+from enum import IntEnum
+
 from components.cards import Card, Color, initial_hand
 
-# Ordered by ascending goodness for blue
+# Ordered by ascending goodness for blue.
+# Note that I'm gradually reducing the places where "color" matters, so think of
+# "red" as player1 and "blue" as player2 in any calls that produce one of these
 FightResult = IntEnum(
     "FightResult",
-    "red_wins_game red_wins_2 red_wins on_hold blue_wins blue_wins_2 blue_wins_game",
+    "blue_wins_game blue_wins_2 blue_wins on_hold red_wins red_wins_2 red_wins_game",
 )
 
 

@@ -58,11 +58,12 @@ def _print_summary(results, ai_names):
 
 def play_round_robin(num_games=1000, interactive=False):
     # New AIs need to go into this dict
-    brains_dict = {"random": RandomAI,
-                   "randomPlusBeatSpied": RandomPlusBeatSpiedAI,
-                   "beatOpponentRandom": BeatOpponentRandomAI,
-                   "spyingBeatRand": SpyingBeatRandomAI,
-                   }
+    brains_dict = {
+        "random": RandomAI,
+        "randomPlusBeatSpied": RandomPlusBeatSpiedAI,
+        "beatOpponentRandom": BeatOpponentRandomAI,
+        "spyingBeatRand": SpyingBeatRandomAI,
+    }
 
     ai_names = brains_dict.keys()
 

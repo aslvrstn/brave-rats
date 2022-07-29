@@ -2,7 +2,7 @@ from typing import Optional, Set
 
 from brains.Brain import Brain
 from components import cards
-from components.cards import Color, Card
+from components.cards import Card, Color
 from components.game_status import GameStatus
 
 

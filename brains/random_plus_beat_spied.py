@@ -18,5 +18,7 @@ class RandomPlusBeatSpiedAI(Brain):
     ) -> Card:
         # If we spied, and we have a choice, let's do something smart
         if spied_card and len(player.hand) > 1:
-            return best_card_against(game, player, spied_card)
+            return best_card_against(
+                player.hand, game.recent_fight_for(player.color), spied_card
+            )
         return random.choice(player.hand)

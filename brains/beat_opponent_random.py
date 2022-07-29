@@ -20,4 +20,6 @@ class BeatOpponentRandomAI(Brain):
         assert opponent_hand
         # Pick a random card from the opponent and pretend they will play that, then try to beat it
         opponent_plays = random.choice(list(opponent_hand))
-        return best_card_against(game, player, opponent_plays)
+        return best_card_against(
+            player.hand, game.recent_fight_for(player.color), opponent_plays
+        )

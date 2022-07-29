@@ -10,7 +10,9 @@ class GameStatus(object):
         self.red_points, self.blue_points = 0, 0
 
         # List of tuples of (red_card, blue_card)
-        self.resolved_fights = []  # Doesn't include on hold fights; use all_fights for full list
+        self.resolved_fights = (
+            []
+        )  # Doesn't include on hold fights; use all_fights for full list
         self.on_hold_fights = []
 
     @property
@@ -37,6 +39,11 @@ class GameStatus(object):
         if self.resolved_fights:
             return self.resolved_fights[-1]
         return None, None
+
+    # Like `most_recent_fight`, but always (your_card, opponent_card)
+    def recent_fight_for(self, color: Color):
+        rec = self.most_recent_fight
+        return rec if color == Color.red else reversed(rec)
 
     @property
     def score_summary(self):

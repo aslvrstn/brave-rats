@@ -1,39 +1,30 @@
-from components.cards import Card, Color
-from components.fight import FightResult, QUICK_FIGHT_RESULT
-from components.game_status import GameStatus
-from components.player import Player
+from typing import List, Tuple
+
+from components.cards import Card
+from components.fight import QUICK_FIGHT_RESULT, FightResult
 
 
 # TODO: This should be cacheable, and is currently the slowest bit
-def best_card_against(game: GameStatus, player: Player, opponent_card: Card) -> Card:
-    if not player.hand:
-        raise ValueError("Player must be holding cards")
+def best_card_against(
+    hand: List[Card], prev_round: Tuple[Card, Card], opponent_card: Card
+) -> Card:
+    if not hand:
+        raise ValueError("Hand must not be empty")
 
-    previous_red_card, previous_blue_card = game.most_recent_fight
+    our_previous_card, opponent_previous_card = prev_round
 
-    # Start with the worst possible result
-    best_result = (
-        FightResult.blue_wins_game
-        if player.color == Color.red
-        else FightResult.red_wins_game
-    )
+    # Start with the worst possible result. In this call, we are always "red"
+    best_result = FightResult.blue_wins_game
     best_card = None
     # Loop over every card to find the best possible FightResult with what we have
-    for card in player.hand:
-        red_card = card if player.color == Color.red else opponent_card
-        blue_card = card if player.color == Color.blue else opponent_card
+    for card in hand:
         res = QUICK_FIGHT_RESULT[
-            (red_card, blue_card, previous_red_card, previous_blue_card)
+            (card, opponent_card, our_previous_card, opponent_previous_card)
         ]
 
-        # `FightResult` is ordered in ascending order for blue, so compare in the right direction.
+        # `FightResult` is ordered in ascending order for red, so compare in the right direction.
         # >= so that we at least always replace `best_card=None` with a real card
-        is_better = (
-            (res >= best_result)
-            if player.color == Color.blue
-            else (res <= best_result)
-        )
-        if is_better:
+        if res >= best_result:
             best_result = res
             best_card = card
     return best_card
