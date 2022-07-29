@@ -15,7 +15,7 @@ EXCLUDED_BRAIN_NAMES = {"human"}
 
 
 def _table_cell(contents):
-    return " {:22} |".format(contents)
+    return " {:30} |".format(contents)
 
 
 def _print_table_cell(contents):
@@ -29,7 +29,7 @@ def _print_table_row(contents):
 
 
 def _print_summary(results, ai_names):
-    _print_table_row(["*"] + [blueify(name) for name in ai_names])
+    _print_table_row([color_pad("")] + [blueify(name) for name in ai_names])
     for red_ai in ai_names:
         _print_table_cell(redify(red_ai))
         for blue_ai in ai_names:
