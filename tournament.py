@@ -7,6 +7,7 @@ from collections import Counter
 from brains.beat_opponent_random import BeatOpponentRandomAI
 from brains.example_ai import RandomAI
 from brains.random_plus_beat_spied import RandomPlusBeatSpiedAI
+from brains.spying_beat_rand import SpyingBeatRandomAI
 from brave_rats import play_match
 from components.cards import Color
 from components.style import blueify, color_pad, redify
@@ -59,7 +60,8 @@ def play_round_robin(num_games=1000, interactive=False):
     # New AIs need to go into this dict
     brains_dict = {"random": RandomAI,
                    "randomPlusBeatSpied": RandomPlusBeatSpiedAI,
-                   "beatOpponentRandom": BeatOpponentRandomAI
+                   "beatOpponentRandom": BeatOpponentRandomAI,
+                   "spyingBeatRand": SpyingBeatRandomAI,
                    }
 
     ai_names = brains_dict.keys()
