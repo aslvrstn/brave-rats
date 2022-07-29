@@ -20,15 +20,15 @@ def _get_played_cards(red_player, blue_player, game, notify_of_hand=True):
         blue_hand = set(blue_player.hand)
     if spy_color == Color.red:
         # Red gets to peek at Blue's card
-        blue_card = blue_player.choose_and_play_card(game)
-        red_card = red_player.choose_and_play_card(game, blue_card)
+        blue_card = blue_player.choose_and_play_card(game, opponent_hand=red_hand)
+        red_card = red_player.choose_and_play_card(game, blue_card, opponent_hand=blue_hand)
     elif spy_color == Color.blue:
         # Blue gets to peek at Red's card
-        red_card = red_player.choose_and_play_card(game)
-        blue_card = blue_player.choose_and_play_card(game, red_card)
+        red_card = red_player.choose_and_play_card(game, opponent_hand=blue_hand)
+        blue_card = blue_player.choose_and_play_card(game, red_card, opponent_hand=red_hand)
     else:
-        red_card = red_player.choose_and_play_card(game)
-        blue_card = blue_player.choose_and_play_card(game)
+        red_card = red_player.choose_and_play_card(game, opponent_hand=blue_hand)
+        blue_card = blue_player.choose_and_play_card(game, opponent_hand=red_hand)
     return red_card, blue_card
 
 

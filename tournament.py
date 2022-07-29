@@ -4,6 +4,7 @@ import argparse
 import sys
 from collections import Counter
 
+from brains.beat_opponent_random import BeatOpponentRandomAI
 from brains.example_ai import RandomAI
 from brains.random_plus_beat_spied import RandomPlusBeatSpiedAI
 from brave_rats import play_match
@@ -56,7 +57,10 @@ def _print_summary(results, ai_names):
 
 def play_round_robin(num_games=1000, interactive=False):
     # New AIs need to go into this dict
-    brains_dict = {"random": RandomAI, "randomPlusBeatSpied": RandomPlusBeatSpiedAI}
+    brains_dict = {"random": RandomAI,
+                   "randomPlusBeatSpied": RandomPlusBeatSpiedAI,
+                   "beatOpponentRandom": BeatOpponentRandomAI
+                   }
 
     ai_names = brains_dict.keys()
 

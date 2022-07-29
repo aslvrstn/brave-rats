@@ -8,7 +8,7 @@ from components.game_status import GameStatus
 from components.player import Player
 
 
-class RandomPlusBeatSpiedAI(Brain):
+class BeatOpponentRandomAI(Brain):
     def play_turn(
         self,
         player: Player,
@@ -16,7 +16,8 @@ class RandomPlusBeatSpiedAI(Brain):
         spied_card: Optional[Card],
         opponent_hand: Optional[Set[Card]],
     ) -> Card:
-        # If we spied, and we have a choice, let's do something smart
-        if spied_card and len(player.hand) > 1:
-            return best_card_against(game, player, spied_card)
-        return random.choice(player.hand)
+        # Only works if we get to track opponent hands
+        assert opponent_hand
+        # Pick a random card from the opponent and pretend they will play that, then try to beat it
+        opponent_plays = random.choice(list(opponent_hand))
+        return best_card_against(game, player, opponent_plays)
