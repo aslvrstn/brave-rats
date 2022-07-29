@@ -4,6 +4,7 @@ from components.game_status import GameStatus
 from components.player import Player
 
 
+# TODO: This should be cacheable, and is currently the slowest bit
 def best_card_against(game: GameStatus, player: Player, opponent_card: Card) -> Card:
     if not player.hand:
         raise ValueError("Player must be holding cards")
