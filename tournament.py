@@ -6,6 +6,8 @@ from collections import Counter
 
 from brains.beat_opponent_random import BeatOpponentRandomAI
 from brains.example_ai import RandomAI
+from brains.in_progress_ai import InProgressAI
+from brains.random_best_outcome import RandomBestOutcome
 from brains.random_plus_beat_spied import RandomPlusBeatSpiedAI
 from brains.spying_beat_rand import SpyingBeatRandomAI
 from brave_rats import play_match
@@ -63,6 +65,8 @@ def play_round_robin(num_games=1000, interactive=False):
         "randomPlusBeatSpied": RandomPlusBeatSpiedAI,
         "beatOpponentRandom": BeatOpponentRandomAI,
         "spyingBeatRand": SpyingBeatRandomAI,
+        "randomBestOutcome": RandomBestOutcome,
+        "inProgressAI": InProgressAI,
     }
 
     ai_names = brains_dict.keys()
