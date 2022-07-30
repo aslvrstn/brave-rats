@@ -123,45 +123,6 @@ def print_results_table(red_general_played=False):
         )
 
 
-def resolve_fight(red_card, blue_card, game):
-    """Given a fight, updates the game state according to the resolution of that fight
-    :param red_card: Card enum value played by red player
-    :param blue_card: Card enum value played by blue player
-    :param game: GameStatus instance to be updated
-    """
-    previous_red_card, previous_blue_card = game.most_recent_fight
-
-    # Using QUICK_FIGHT_RESULT is equivalent to this, but all the answers have been cached off
-    # result = fight_result(red_card, blue_card, previous_red_card, previous_blue_card)
-    result = QUICK_FIGHT_RESULT[
-        (red_card, blue_card, previous_red_card, previous_blue_card)
-    ]
-
-    if result is FightResult.on_hold:
-        game.on_hold_fights.append((red_card, blue_card))
-    else:
-        game.resolved_fights.extend(game.on_hold_fights)
-        game.resolved_fights.append((red_card, blue_card))
-        points_from_on_hold = game.on_hold_points
-        game.on_hold_fights = []
-
-    if result in {FightResult.red_wins, FightResult.red_wins_2}:
-        extra_point = 1 if result is FightResult.red_wins_2 else 0
-        game.red_points += 1 + points_from_on_hold + extra_point
-
-    if result in {FightResult.blue_wins, FightResult.blue_wins_2}:
-        extra_point = 1 if result is FightResult.blue_wins_2 else 0
-        game.blue_points += 1 + points_from_on_hold + extra_point
-
-    # If you win by princess, just max out the scoreboard
-    if result == FightResult.red_wins_game:
-        game.red_points = 999999
-    if result == FightResult.blue_wins_game:
-        game.blue_points = 999999
-
-    return result
-
-
 def successful_spy_color(xxx_todo_changeme):
     """Determine whether the provided fight has a non-nullified spy in it
     Takes a fight tuple of (red_card, blue_card)

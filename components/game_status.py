@@ -2,6 +2,8 @@ from components.cards import Card, Color
 
 # Game ends when players have played all of their cards, so the max number of rounds
 # in the game is the size of the players' initial hand.
+from components.fight import QUICK_FIGHT_RESULT, FightResult
+
 POINTS_TO_WIN = 4
 
 
@@ -53,3 +55,41 @@ class GameStatus(object):
         if self.on_hold_points:
             return player_scores + " with {} points on hold".format(self.on_hold_points)
         return player_scores
+
+    def resolve_fight(self, red_card, blue_card):
+        """Given a fight, updates the game state according to the resolution of that fight
+        :param red_card: Card enum value played by red player
+        :param blue_card: Card enum value played by blue player
+        :param game: GameStatus instance to be updated
+        """
+        previous_red_card, previous_blue_card = self.most_recent_fight
+
+        # Using QUICK_FIGHT_RESULT is equivalent to this, but all the answers have been cached off
+        # result = fight_result(red_card, blue_card, previous_red_card, previous_blue_card)
+        result = QUICK_FIGHT_RESULT[
+            (red_card, blue_card, previous_red_card, previous_blue_card)
+        ]
+
+        if result is FightResult.on_hold:
+            self.on_hold_fights.append((red_card, blue_card))
+        else:
+            self.resolved_fights.extend(self.on_hold_fights)
+            self.resolved_fights.append((red_card, blue_card))
+            points_from_on_hold = self.on_hold_points
+            self.on_hold_fights = []
+
+        if result in {FightResult.red_wins, FightResult.red_wins_2}:
+            extra_point = 1 if result is FightResult.red_wins_2 else 0
+            self.red_points += 1 + points_from_on_hold + extra_point
+
+        if result in {FightResult.blue_wins, FightResult.blue_wins_2}:
+            extra_point = 1 if result is FightResult.blue_wins_2 else 0
+            self.blue_points += 1 + points_from_on_hold + extra_point
+
+        # If you win by princess, just max out the scoreboard
+        if result == FightResult.red_wins_game:
+            self.red_points = 999999
+        if result == FightResult.blue_wins_game:
+            self.blue_points = 999999
+
+        return result

@@ -6,7 +6,7 @@ from brains.Brain import Brain
 from brains.example_ai import RandomAI
 from brains.human import HumanBrain
 from components.cards import Color
-from components.fight import resolve_fight, successful_spy_color
+from components.fight import successful_spy_color
 from components.game_status import GameStatus
 from components.player import Player
 from components.style import blueify, redify
@@ -57,7 +57,7 @@ def play_game(
         red_card, blue_card = _get_played_cards(
             red_player, blue_player, game, notify_of_hand
         )
-        result = resolve_fight(red_card, blue_card, game)
+        result = game.resolve_fight(red_card, blue_card)
         if verbose:
             result_string = "red {} vs. blue {} -> {}"
             print(
