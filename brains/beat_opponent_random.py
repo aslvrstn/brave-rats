@@ -18,6 +18,10 @@ class BeatOpponentRandomAI(Brain):
     ) -> Card:
         # Only works if we get to track opponent hands
         assert opponent_hand
+
+        if len(player.hand) == 1:
+            return player.hand[0]
+
         # Pick a random card from the opponent and pretend they will play that, then try to beat it
         opponent_plays = random.choice(list(opponent_hand))
         return best_card_against(

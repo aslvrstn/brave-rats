@@ -19,8 +19,10 @@ class SpyingBeatRandomAI(Brain):
         # Only works if we get to track opponent hands
         assert opponent_hand
 
-        # If we spied, and we have a choice, let's do something smart
-        if spied_card and len(player.hand) > 1:
+        if len(player.hand) == 1:
+            return player.hand[0]
+
+        if spied_card:
             return best_card_against(
                 player.hand, game.recent_fight_for(player.color), spied_card
             )
