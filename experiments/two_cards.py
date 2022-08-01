@@ -2,7 +2,7 @@ import itertools
 from typing import List, Dict
 
 from components.cards import Card, Color
-from components.game_status import GameStatus
+from components.game_status import GameStatus, POINTS_TO_WIN
 
 ALL_CARDS = [card for card in Card]
 
@@ -15,7 +15,6 @@ def play_a_round(red_hand: List[Card], blue_hand: List[Card], game: GameStatus) 
 
     avg_by_red_card: Dict[Card, float] = {}
 
-    all_results = []
     for red_plays in red_hand:
         this_play_results = []
         tot_score = 0.0
@@ -26,25 +25,28 @@ def play_a_round(red_hand: List[Card], blue_hand: List[Card], game: GameStatus) 
             new_blue_hand.remove(blue_plays)
             new_game = game.clone()
             new_game.resolve_fight(red_plays, blue_plays)
-            all_results.append(new_game)
             this_play_results.append(new_game)
             tot_score += play_a_round(new_red_hand, new_blue_hand, new_game)
         avg_score = tot_score / len(blue_hand)
         avg_by_red_card[red_plays] = avg_score
 
-    print("********")
-    print(avg_by_red_card)
-    for res in all_results:
-        print(res.blue_points, res.red_points, res.winner, res.resolved_fights)
-
     return max(avg_by_red_card.values())
 
 
 def foo():
-    all_hands = list(itertools.combinations(ALL_CARDS, 3))
+    # Start off with some points (assuming the game is split, basically), so that this is interesting playing only
+    # a few rounds.
+    cards_to_play = 2
+    starting_points = POINTS_TO_WIN - (7 - cards_to_play) // 2
+
+    initial_game_state = GameStatus(red_points=starting_points, blue_points=starting_points)
+    all_hands = list(itertools.combinations(ALL_CARDS, 2))
     for red_hand_t in all_hands:
         for blue_hand_t in all_hands:
-            play_a_round(list(red_hand_t), list(blue_hand_t), GameStatus())
+            score = play_a_round(list(red_hand_t), list(blue_hand_t), initial_game_state)
+            # Find hands that are really good for red
+            if score > .8:
+                print(f"{red_hand_t} vs {blue_hand_t}: {score}")
 
 
 if __name__ == "__main__":
