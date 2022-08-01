@@ -43,8 +43,8 @@ def play_a_round(red_hand: List[Card], blue_hand: List[Card], game: GameStatus) 
 def foo():
     # Start off with some points (assuming the game is split, basically), so that this is interesting playing only
     # a few rounds.
-    cards_to_play = 3
-    starting_points = POINTS_TO_WIN - (7 - cards_to_play) // 2
+    cards_to_play = 4
+    starting_points = (7 - cards_to_play) // 2
 
     initial_game_state = GameStatus(red_points=starting_points, blue_points=starting_points)
     all_hands = list(itertools.combinations(ALL_CARDS, cards_to_play))
@@ -52,8 +52,7 @@ def foo():
         for blue_hand_t in all_hands:
             score, played = play_a_round(list(red_hand_t), list(blue_hand_t), initial_game_state)
             # Find hands that are really good for red
-            if score > .8:
-                print(f"{red_hand_t} vs {blue_hand_t}: {score} {played}")
+            print(f"{red_hand_t} vs {blue_hand_t}: {score} {played}")
 
 
 if __name__ == "__main__":
