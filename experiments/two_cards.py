@@ -52,7 +52,8 @@ def foo():
         for blue_hand_t in all_hands:
             score, played = play_a_round(list(red_hand_t), list(blue_hand_t), initial_game_state)
             # Find hands that are really good for red
-            print(f"{red_hand_t} vs {blue_hand_t}: {score} {played}")
+            if score >= 0.9:
+                print(f"{red_hand_t} vs {blue_hand_t}: {score} {played}")
 
 
 if __name__ == "__main__":
