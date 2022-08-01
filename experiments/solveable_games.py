@@ -87,7 +87,7 @@ def play_it_forward(game: GameStatus, red_hand: List[Card], blue_hand: List[Card
 def foo():
     # Start off with some points (assuming the game is split, basically), so that this is interesting playing only
     # a few rounds.
-    cards_to_play = 4
+    cards_to_play = 5
     starting_points = (len(ALL_CARDS) - cards_to_play) // 2
 
     initial_game_state = GameStatus(red_points=starting_points, blue_points=starting_points)
