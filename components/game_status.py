@@ -24,6 +24,9 @@ class GameStatus(object):
         self.resolved_fights = resolved_fights.copy() if resolved_fights else []
         self.on_hold_fights = on_hold_fights.copy() if on_hold_fights else []
 
+    def __str__(self):
+        return f"r: {self.red_points} b: {self.blue_points}, held: {self.on_hold_fights}"
+
     def clone(self):
         return GameStatus(
             self.red_points, self.blue_points, self.resolved_fights, self.on_hold_fights

@@ -74,13 +74,13 @@ def play_it_forward(game: GameStatus, red_hand: List[Card], blue_hand: List[Card
     _, red_plays = play_a_round(red_hand, blue_hand, game)
     print(f"{indent_string(depth)}Red plays: {red_plays.name}")
     for blue_plays in blue_hand:
-        print(f"{indent_string(depth+1)}If blue plays {blue_plays.name}:")
         red_copy = red_hand.copy()
         blue_copy = blue_hand.copy()
         red_copy.remove(red_plays)
         blue_copy.remove(blue_plays)
         game_copy = game.clone()
         game_copy.resolve_fight(red_plays, blue_plays)
+        print(f"{indent_string(depth+1)}If blue plays {blue_plays.name} ({game_copy}):")
         play_it_forward(game_copy, red_copy, blue_copy, depth=depth+1)
 
 
