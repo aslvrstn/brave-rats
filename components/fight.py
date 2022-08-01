@@ -1,7 +1,7 @@
 import itertools
 from enum import IntEnum
 
-from components.cards import Card, Color, initial_hand
+from components.cards import Card, Color
 
 # Ordered by ascending goodness for blue.
 # Note that I'm gradually reducing the places where "color" matters, so think of
@@ -91,7 +91,7 @@ def fight_result(red_card, blue_card, prev_red_card, prev_blue_card):
 QUICK_FIGHT_RESULT = {
     cards_: fight_result(*cards_)
     for cards_ in itertools.product(
-        *[initial_hand()] * 2 + [initial_hand() + [None]] * 2
+        *[[card for card in Card]] * 2 + [[card for card in Card] + [None]] * 2
     )
 }
 

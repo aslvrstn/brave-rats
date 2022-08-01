@@ -1,3 +1,5 @@
+from typing import List, Tuple
+
 from components.cards import Card, Color
 
 # Game ends when players have played all of their cards, so the max number of rounds
@@ -8,14 +10,24 @@ POINTS_TO_WIN = 4
 
 
 class GameStatus(object):
-    def __init__(self):
-        self.red_points, self.blue_points = 0, 0
+    def __init__(
+        self,
+        red_points: int = 0,
+        blue_points: int = 0,
+        resolved_fights: List[Tuple] = None,
+        on_hold_fights: List[Tuple] = None,
+    ):
+        self.red_points, self.blue_points = red_points, blue_points
 
         # List of tuples of (red_card, blue_card)
-        self.resolved_fights = (
-            []
-        )  # Doesn't include on hold fights; use all_fights for full list
-        self.on_hold_fights = []
+        # Doesn't include on hold fights; use all_fights for full list
+        self.resolved_fights = resolved_fights.copy() if resolved_fights else []
+        self.on_hold_fights = on_hold_fights.copy() if on_hold_fights else []
+
+    def clone(self):
+        return GameStatus(
+            self.red_points, self.blue_points, self.resolved_fights, self.on_hold_fights
+        )
 
     @property
     def on_hold_points(self):

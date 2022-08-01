@@ -5,7 +5,7 @@ from collections import Counter
 from brains.Brain import Brain
 from brains.example_ai import RandomAI
 from brains.human import HumanBrain
-from components.cards import Color
+from components.cards import Color, Card
 from components.fight import successful_spy_color
 from components.game_status import GameStatus
 from components.player import Player
@@ -50,8 +50,10 @@ def play_game(
         blue_brain = RandomAI()
 
     game = GameStatus()
-    red_player = Player(Color.red, brain=red_brain, hand_str=initial_red_hand_str)
-    blue_player = Player(Color.blue, brain=blue_brain, hand_str=initial_blue_hand_str)
+    red_hand = [Card.get_from_int(int(x)) for x in initial_red_hand_str] if initial_red_hand_str else None
+    blue_hand = [Card.get_from_int(int(x)) for x in initial_blue_hand_str] if initial_blue_hand_str else None
+    red_player = Player(Color.red, brain=red_brain, hand=red_hand)
+    blue_player = Player(Color.blue, brain=blue_brain, hand=blue_hand)
 
     while not game.winner and red_player.has_cards() and blue_player.has_cards():
         red_card, blue_card = _get_played_cards(

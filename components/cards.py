@@ -16,13 +16,5 @@ class Card(IntEnum):
         return next((item for item in cls if item.value is n))
 
 
-def initial_hand(hand_str=None):
-    if hand_str:
-        return [Card.get_from_int(int(x)) for x in hand_str]
-    else:
-        # In a vanilla game, players will start with one of each card
-        return [card for card in Card]
-
-
 # Use IntEnum, not Enum, here, to prevent bug #15: "Loaded brain functions have wiiiiiierd behavior"
 Color = IntEnum("Color", "red blue")

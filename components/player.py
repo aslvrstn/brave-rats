@@ -1,4 +1,4 @@
-from typing import Optional, Set
+from typing import Optional, Set, List
 
 from brains.Brain import Brain
 from components import cards
@@ -11,7 +11,7 @@ class CheatingException(Exception):
 
 
 class Player(object):
-    def __init__(self, color: Color, brain: Brain, hand_str: str = None):
+    def __init__(self, color: Color, brain: Brain, hand: List[Card] = None):
         """
         :param color: a Color enum value indicating which color this player is playing for
         :param game: a GameStatus object
@@ -26,7 +26,7 @@ class Player(object):
                 exactly once per round.
         :param hand_str: string of card values in initial hand (eg. '0123456' to play without Prince)
         """
-        self.hand = cards.initial_hand(hand_str)
+        self.hand = hand if hand else [card for card in Card]
         self.color = color
         self.brain = brain
 
