@@ -29,11 +29,11 @@ def play_a_round(red_hand: List[Card], blue_hand: List[Card], game: GameStatus) 
     if not red_hand or not blue_hand:
         return (0.5, [])
 
-    avg_by_red_card: Dict[Card, float] = {}
+    min_by_red_card: Dict[Card, float] = {}
 
     for red_plays in red_hand:
         this_play_results = []
-        tot_score = 0.0
+        scores = []
         for blue_plays in blue_hand:
             new_red_hand = red_hand.copy()
             new_blue_hand = blue_hand.copy()
@@ -43,13 +43,12 @@ def play_a_round(red_hand: List[Card], blue_hand: List[Card], game: GameStatus) 
             new_game.resolve_fight(red_plays, blue_plays)
             this_play_results.append(new_game)
             val, played_from_here = play_a_round(new_red_hand, new_blue_hand, new_game)
-            tot_score += val
-        avg_score = tot_score / len(blue_hand)
-        avg_by_red_card[red_plays] = avg_score
+            scores.append(val)
+        min_by_red_card[red_plays] = min(scores)
 
     best_card = None
     best_val = 0.0
-    for card, val in avg_by_red_card.items():
+    for card, val in min_by_red_card.items():
         if val >= best_val:
             best_card = card
             best_val = val
@@ -60,8 +59,8 @@ def play_a_round(red_hand: List[Card], blue_hand: List[Card], game: GameStatus) 
 def foo():
     # Start off with some points (assuming the game is split, basically), so that this is interesting playing only
     # a few rounds.
-    cards_to_play = 6
-    starting_points = (8 - cards_to_play) // 2
+    cards_to_play = 4
+    starting_points = (len(ALL_CARDS) - cards_to_play) // 2
 
     initial_game_state = GameStatus(red_points=starting_points, blue_points=starting_points)
     all_hands = list(itertools.combinations(ALL_CARDS, cards_to_play))
@@ -69,7 +68,7 @@ def foo():
         for blue_hand_t in all_hands:
             score, played = play_a_round(list(red_hand_t), list(blue_hand_t), initial_game_state)
             # Find hands that are really good for red
-            if score >= 0.8:
+            if score >= 0.9:
                 print(f"{red_hand_t} vs {blue_hand_t}: {score} {played}")
 
 
