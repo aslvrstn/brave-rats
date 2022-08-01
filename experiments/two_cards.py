@@ -1,13 +1,29 @@
 import itertools
-from typing import List, Dict, Tuple
+from dataclasses import dataclass
+from typing import List, Dict, Tuple, FrozenSet
 
 from components.cards import Card, Color
-from components.game_status import GameStatus, POINTS_TO_WIN
+from components.game_status import GameStatus
 
 ALL_CARDS = [card for card in Card]
 
 
+@dataclass(frozen=True)
+class MemoizableState:
+    red_hand: FrozenSet[Card]
+    blue_hand: FrozenSet[Card]
+    red_points: int
+    blue_points: int
+    on_hold_fights: Tuple[Tuple]
+
+
+cached_res: Dict[MemoizableState, Tuple] = {}
+
+
 def play_a_round(red_hand: List[Card], blue_hand: List[Card], game: GameStatus) -> Tuple[float, List[Card]]:
+    ms = MemoizableState(frozenset(red_hand), frozenset(blue_hand), game.red_points, game.blue_points, tuple(game.on_hold_fights))
+    if ms in cached_res:
+        return cached_res[ms]
     if game.winner:
         return (1.0, []) if game.winner == Color.red else (0.0, [])
     if not red_hand or not blue_hand:
@@ -37,13 +53,14 @@ def play_a_round(red_hand: List[Card], blue_hand: List[Card], game: GameStatus) 
         if val >= best_val:
             best_card = card
             best_val = val
+    cached_res[ms] = (best_val, best_card)
     return best_val, [best_card]
 
 
 def foo():
     # Start off with some points (assuming the game is split, basically), so that this is interesting playing only
     # a few rounds.
-    cards_to_play = 4
+    cards_to_play = 6
     starting_points = (7 - cards_to_play) // 2
 
     initial_game_state = GameStatus(red_points=starting_points, blue_points=starting_points)
@@ -52,7 +69,7 @@ def foo():
         for blue_hand_t in all_hands:
             score, played = play_a_round(list(red_hand_t), list(blue_hand_t), initial_game_state)
             # Find hands that are really good for red
-            if score >= 0.9:
+            if score >= 0.8:
                 print(f"{red_hand_t} vs {blue_hand_t}: {score} {played}")
 
 
