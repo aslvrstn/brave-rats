@@ -61,7 +61,7 @@ def foo():
     # Start off with some points (assuming the game is split, basically), so that this is interesting playing only
     # a few rounds.
     cards_to_play = 6
-    starting_points = (7 - cards_to_play) // 2
+    starting_points = (8 - cards_to_play) // 2
 
     initial_game_state = GameStatus(red_points=starting_points, blue_points=starting_points)
     all_hands = list(itertools.combinations(ALL_CARDS, cards_to_play))
