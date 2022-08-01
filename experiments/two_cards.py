@@ -1,23 +1,24 @@
 import itertools
 from typing import List, Dict
 
-from components.cards import Card
-from components.fight import QUICK_FIGHT_RESULT
+from components.cards import Card, Color
 from components.game_status import GameStatus
 
 ALL_CARDS = [card for card in Card]
 
 
-def play_a_round(red_hand: List[Card], blue_hand: List[Card], game: GameStatus):
+def play_a_round(red_hand: List[Card], blue_hand: List[Card], game: GameStatus) -> Color:
+    if game.winner:
+        return 1.0 if game.winner == Color.red else 0.0
     if not red_hand or not blue_hand:
-        return
+        return 0.5
 
-    max_by_play: Dict[Card, int] = {}
-    min_by_play: Dict[Card, int] = {}
+    avg_by_red_card: Dict[Card, float] = {}
 
     all_results = []
     for red_plays in red_hand:
         this_play_results = []
+        tot_score = 0.0
         for blue_plays in blue_hand:
             new_red_hand = red_hand.copy()
             new_blue_hand = blue_hand.copy()
@@ -27,27 +28,20 @@ def play_a_round(red_hand: List[Card], blue_hand: List[Card], game: GameStatus):
             new_game.resolve_fight(red_plays, blue_plays)
             all_results.append(new_game)
             this_play_results.append(new_game)
-            play_a_round(new_red_hand, new_blue_hand, new_game)
-        max_by_play[red_plays] = max([res.red_points for res in this_play_results])
-        min_by_play[red_plays] = min([res.red_points for res in this_play_results])
+            tot_score += play_a_round(new_red_hand, new_blue_hand, new_game)
+        avg_score = tot_score / len(blue_hand)
+        avg_by_red_card[red_plays] = avg_score
 
     print("********")
-    print(max([res.red_points for res in all_results]))
-    print(min([res.red_points for res in all_results]))
-    print(max_by_play)
-    print(min_by_play)
-    for c1 in red_hand:
-        for c2 in red_hand:
-            if c1 == c2:
-                continue
-            if min_by_play[c1] >= max_by_play[c2]:
-                print(f"{c1} dominates {c2}")
+    print(avg_by_red_card)
     for res in all_results:
         print(res.blue_points, res.red_points, res.winner, res.resolved_fights)
 
+    return max(avg_by_red_card.values())
+
 
 def foo():
-    all_hands = list(itertools.combinations(ALL_CARDS, 4))
+    all_hands = list(itertools.combinations(ALL_CARDS, 3))
     for red_hand_t in all_hands:
         for blue_hand_t in all_hands:
             play_a_round(list(red_hand_t), list(blue_hand_t), GameStatus())
