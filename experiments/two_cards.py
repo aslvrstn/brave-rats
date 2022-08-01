@@ -56,27 +56,32 @@ def play_a_round(red_hand: List[Card], blue_hand: List[Card], game: GameStatus) 
     return best_val, best_card
 
 
-def play_it_forward(game: GameStatus, red_hand: List[Card], blue_hand: List[Card]) -> None:
+def play_it_forward(game: GameStatus, red_hand: List[Card], blue_hand: List[Card], depth: int=0) -> None:
+    def indent_string(depth: int):
+        if depth == 0:
+            return ""
+        return "|" + "-" * 3 * depth + ">" if depth else ""
+
     # Play the game forward to try to build up a plausible game tree
     if game.winner:
-        print(f"{game.winner.name} wins!")
+        print(f"{indent_string(depth+1)}{game.winner.name} wins!")
         return
     elif not red_hand:
         print(blue_hand)
-        print(f"Tie!")
+        print(f"{indent_string(depth+1)}Tie!")
         return
 
     _, red_plays = play_a_round(red_hand, blue_hand, game)
-    print(f"Red plays: {red_plays}")
+    print(f"{indent_string(depth)}Red plays: {red_plays.name}")
     for blue_plays in blue_hand:
-        print(f"If blue plays {blue_plays}:")
+        print(f"{indent_string(depth+1)}If blue plays {blue_plays.name}:")
         red_copy = red_hand.copy()
         blue_copy = blue_hand.copy()
         red_copy.remove(red_plays)
         blue_copy.remove(blue_plays)
         game_copy = game.clone()
         game_copy.resolve_fight(red_plays, blue_plays)
-        play_it_forward(game_copy, red_copy, blue_copy)
+        play_it_forward(game_copy, red_copy, blue_copy, depth=depth+1)
 
 
 def foo():
