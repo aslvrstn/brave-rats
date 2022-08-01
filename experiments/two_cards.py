@@ -1,6 +1,6 @@
 import itertools
 from dataclasses import dataclass
-from typing import List, Dict, Tuple, FrozenSet
+from typing import List, Dict, Tuple, FrozenSet, Optional
 
 from components.cards import Card, Color
 from components.game_status import GameStatus
@@ -20,14 +20,14 @@ class MemoizableState:
 cached_res: Dict[MemoizableState, Tuple] = {}
 
 
-def play_a_round(red_hand: List[Card], blue_hand: List[Card], game: GameStatus) -> Tuple[float, List[Card]]:
+def play_a_round(red_hand: List[Card], blue_hand: List[Card], game: GameStatus) -> Tuple[float, Optional[Card]]:
     ms = MemoizableState(frozenset(red_hand), frozenset(blue_hand), game.red_points, game.blue_points, tuple(game.on_hold_fights))
     if ms in cached_res:
         return cached_res[ms]
     if game.winner:
-        return (1.0, []) if game.winner == Color.red else (0.0, [])
+        return (1.0, None) if game.winner == Color.red else (0.0, None)
     if not red_hand or not blue_hand:
-        return (0.5, [])
+        return (0.5, None)
 
     min_by_red_card: Dict[Card, float] = {}
 
@@ -53,7 +53,30 @@ def play_a_round(red_hand: List[Card], blue_hand: List[Card], game: GameStatus) 
             best_card = card
             best_val = val
     cached_res[ms] = (best_val, best_card)
-    return best_val, [best_card]
+    return best_val, best_card
+
+
+def play_it_forward(game: GameStatus, red_hand: List[Card], blue_hand: List[Card]) -> None:
+    # Play the game forward to try to build up a plausible game tree
+    if game.winner:
+        print(f"{game.winner.name} wins!")
+        return
+    elif not red_hand:
+        print(blue_hand)
+        print(f"Tie!")
+        return
+
+    _, red_plays = play_a_round(red_hand, blue_hand, game)
+    print(f"Red plays: {red_plays}")
+    for blue_plays in blue_hand:
+        print(f"If blue plays {blue_plays}:")
+        red_copy = red_hand.copy()
+        blue_copy = blue_hand.copy()
+        red_copy.remove(red_plays)
+        blue_copy.remove(blue_plays)
+        game_copy = game.clone()
+        game_copy.resolve_fight(red_plays, blue_plays)
+        play_it_forward(game_copy, red_copy, blue_copy)
 
 
 def foo():
@@ -70,6 +93,8 @@ def foo():
             # Find hands that are really good for red
             if score >= 0.9:
                 print(f"{red_hand_t} vs {blue_hand_t}: {score} {played}")
+
+                play_it_forward(initial_game_state.clone(), list(red_hand_t), list(blue_hand_t))
 
 
 if __name__ == "__main__":
