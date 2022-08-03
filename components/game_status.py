@@ -1,10 +1,10 @@
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 from components.cards import Card, Color
 
 # Game ends when players have played all of their cards, so the max number of rounds
 # in the game is the size of the players' initial hand.
-from components.fight import QUICK_FIGHT_RESULT, FightResult
+from components.fight import QUICK_FIGHT_RESULT, FightResult, successful_spy_color
 
 
 class GameStatus(object):
@@ -70,6 +70,9 @@ class GameStatus(object):
         if self.on_hold_points:
             return player_scores + " with {} points on hold".format(self.on_hold_points)
         return player_scores
+
+    def spy_color(self) -> Optional[Color]:
+        return successful_spy_color(self.most_recent_fight)
 
     def resolve_fight(self, red_card, blue_card):
         """Given a fight, updates the game state according to the resolution of that fight

@@ -99,5 +99,20 @@ def foo():
                 play_it_forward(initial_game_state.clone(), list(red_hand_t), list(blue_hand_t))
 
 
+def test_spying():
+    red_hand = [Card.general, Card.princess]
+    blue_hand = [Card.general, Card.prince]
+
+    # Set it up so red gets to spy
+    prev = (Card.spy, Card.princess)
+    initial_game_state = GameStatus(points_to_win=2, resolved_fights=[prev])
+    assert initial_game_state.spy_color() == Color.red
+
+    score, played = play_a_round(red_hand, blue_hand, initial_game_state)
+    play_it_forward(initial_game_state.clone(), red_hand, blue_hand)
+
+
 if __name__ == "__main__":
     foo()
+    print("** Testing spying **")
+    test_spying()
