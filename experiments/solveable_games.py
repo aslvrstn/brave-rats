@@ -105,7 +105,7 @@ def play_it_forward(game: GameStatus, red_hand: List[Card], blue_hand: List[Card
 
     print(f"{indent_string(depth)}{game}")
     if game.spy_color() == Color.red:
-        print("Red gets to spy")
+        print(f"{indent_string(depth)}Red gets to spy")
         for blue_plays in blue_hand:
             _, red_plays = play_a_spied_round(red_hand, blue_hand,blue_plays, game)
             red_copy = red_hand.copy()
