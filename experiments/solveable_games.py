@@ -131,9 +131,10 @@ def play_it_forward(game: GameStatus, red_hand: List[Card], blue_hand: List[Card
 
 
 def foo():
-    cards_to_play = 3
-    # Make it so you need to win ~every round from here on out (unless you get a twofer)
-    initial_game_state = GameStatus(points_to_win=cards_to_play)
+    cards_to_play = 4
+    # Make it so you need to win a best-of the remaining rounds. Possibly instead want to allow splitting for evens
+    points_to_win = (cards_to_play // 2) + 1
+    initial_game_state = GameStatus(points_to_win=points_to_win)
     all_hands = list(itertools.combinations(ALL_CARDS, cards_to_play))
     winning_count = 0
     for red_hand_t in all_hands:
