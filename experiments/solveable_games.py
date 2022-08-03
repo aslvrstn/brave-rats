@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from typing import List, Dict, Tuple, FrozenSet, Optional
 
 from components.cards import Card, Color
-from components.fight import successful_spy_color
 from components.game_status import GameStatus
 
 ALL_CARDS = [card for card in Card]
@@ -52,7 +51,7 @@ def play_a_round(red_hand: List[Card], blue_hand: List[Card], game: GameStatus) 
         return (0.5, None)
 
     # TODO: This isn't well tested!
-    if successful_spy_color(game.most_recent_fight) == Color.red:
+    if game.spy_color() == Color.red:
         best_case_for_blue = 1.0  # The worst outcome for blue
         red_responds = None
         for blue_plays in blue_hand:
