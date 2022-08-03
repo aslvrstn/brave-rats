@@ -6,17 +6,17 @@ from components.cards import Card, Color
 # in the game is the size of the players' initial hand.
 from components.fight import QUICK_FIGHT_RESULT, FightResult
 
-POINTS_TO_WIN = 4
-
 
 class GameStatus(object):
     def __init__(
         self,
+        points_to_win: int = 4,
         red_points: int = 0,
         blue_points: int = 0,
         resolved_fights: List[Tuple] = None,
         on_hold_fights: List[Tuple] = None,
     ):
+        self.points_to_win = points_to_win
         self.red_points, self.blue_points = red_points, blue_points
 
         # List of tuples of (red_card, blue_card)
@@ -29,7 +29,7 @@ class GameStatus(object):
 
     def clone(self):
         return GameStatus(
-            self.red_points, self.blue_points, self.resolved_fights, self.on_hold_fights
+            self.points_to_win, self.red_points, self.blue_points, self.resolved_fights, self.on_hold_fights
         )
 
     @property
@@ -43,9 +43,9 @@ class GameStatus(object):
 
     @property
     def winner(self):
-        if self.red_points >= POINTS_TO_WIN:
+        if self.red_points >= self.points_to_win:
             return Color.red
-        if self.blue_points >= POINTS_TO_WIN:
+        if self.blue_points >= self.points_to_win:
             return Color.blue
         return None
 
